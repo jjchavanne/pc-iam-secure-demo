@@ -42,7 +42,7 @@ data "aws_iam_policy_document" "example" {
     ]
 
     resources = [
-      "arn:aws:s3:::my-company"
+      "*"
     ]
   }
 }
