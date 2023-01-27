@@ -1,19 +1,22 @@
-resource "aws_iam_policy" "HighPrivPolicy" {
-  name        = "HighPrivPolicy"
+resource "aws_iam_policy" "policy" {
+  name        = "S3ReaderPolicy"
   path        = "/"
-  description = "Allows Admin Privileges"
+  description = "Allows to read objects from S3 buckets"
 
   # Terraform's "jsonencode" function converts a
   # Terraform expression result to valid JSON syntax.
   policy = jsonencode({
-	 "Version": "2012-10-17",
-	 "Statement": [
-	   {
-     "Action": "*",
-		 "Effect": "Allow",
-		 "Resource": "*"
-	  }
-   ]
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "s3:Get*",
+                "s3:List*"
+            ],
+            "Resource": "*"
+        }
+    ]
 })
 }
 
@@ -25,7 +28,7 @@ resource "aws_iam_role" "test_role" {
       {
       "Action": "sts:AssumeRole",
       "Principal": {
-        "AWS": "*"
+        "Service": "s3.amazonaws.com"
       },
       "Effect": "Allow"
       }
@@ -38,7 +41,7 @@ data "aws_iam_policy_document" "example" {
     sid = "1"
     effect = "Allow"
     actions = [
-      "iam:AttachUserPolicy"
+      "s3:Get*"
     ]
 
     resources = [
